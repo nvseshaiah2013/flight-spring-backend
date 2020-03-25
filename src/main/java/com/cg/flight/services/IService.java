@@ -5,14 +5,15 @@ import java.util.List;
 import com.cg.flight.entities.Flight;
 import com.cg.flight.entities.Ticket;
 import com.cg.flight.entities.User;
+import com.cg.flight.requests.LoginRequest;
 
 
 
 
-public interface IFlightService {
+public interface IService {
 	public void init();
-	public User userAuthenticate(String username,String password);
-	public String registerUser(String name,String username,String password,int age);
+	public String userAuthenticate(LoginRequest request);
+	public Boolean registerUser(User user);
 	public List<Flight> getFlights(String source,String destination,String date);
 	public boolean cancelTicket(Ticket ticket);
 	public boolean bookFlight(Flight flight,User user);

@@ -2,7 +2,10 @@ package com.cg.flight.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import com.cg.flight.entities.Flight;
@@ -13,10 +16,13 @@ import com.cg.flight.entities.User;
 @Repository
 public class FlightDao  implements IFlightDao
 {
-
+	@Autowired 
+	public EntityManager entityManager;
 	@Override
 	public String addUser(String name, String username, String password, int age) {
-		
+		System.out.println("Called D A");
+		entityManager.persist(new User(name,username,password,age));
+		System.out.println("Called D B");
 		return null;
 	}
 
