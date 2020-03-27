@@ -4,25 +4,32 @@ package com.cg.flight.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.flight.entities.User;
 import com.cg.flight.requests.LoginRequest;
+import com.cg.flight.responses.LoginResponse;
 import com.cg.flight.services.IService;
 import com.cg.flight.services.JwtUtil;
 import com.cg.flight.services.LoginUserService;
 
 @RestController
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value="/users")
 public class UserController {
 	
@@ -38,28 +45,30 @@ public class UserController {
 	@Autowired 
 	private IService service;
 	
-	@GetMapping(value="/")
+	@GetMapping(value="/a")
 	public ResponseEntity<String> getUsers()
 	{
+		System.out.println("ho");
 		return ResponseEntity.ok("Fetched");
 	}
 	
-	@PostMapping(value="/sample")
+	@PostMapping(value="/sample",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getRespo()
 	{
-		return ResponseEntity.ok("Sample");
+		System.out.println("ho");
+		return ResponseEntity.ok("{\"message\":\"Sample\"}");
 	}
 	
-	@PostMapping(value="/add")
+	@PostMapping(value="/add",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addUser(@Valid @RequestBody User user)
 	{
 		System.out.println("Add");
 		service.registerUser(user);
-		return ResponseEntity.ok("User Registered Successfully");
+		return new ResponseEntity<String>("{\"message\":\"Mission Successfull\"}",HttpStatus.CREATED);
 	}
 	
-	@PostMapping(value="/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
+	@PostMapping(value="/authenticate",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 
 		try {
 			authManager.authenticate(
@@ -76,7 +85,7 @@ public class UserController {
 
 		final String jwt = jwtUtil.generateToken(userDetails);
 
-		return ResponseEntity.ok(jwt);
+		return new ResponseEntity(new LoginResponse(jwt),HttpStatus.OK);
 	}
 	
 	
