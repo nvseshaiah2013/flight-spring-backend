@@ -29,4 +29,10 @@ public class UserDao implements IUserDao {
 		return null;
 	}
 
+	@Override
+	public User findById(String username)
+	{
+		User user  = entityManager.find(User.class, username);
+		return user;
+	}
 }

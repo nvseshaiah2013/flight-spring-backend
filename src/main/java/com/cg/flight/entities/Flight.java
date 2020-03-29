@@ -12,6 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 
 
@@ -22,17 +26,43 @@ public class Flight implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(length=5)
+	@NotEmpty(message="Flight Code cannot be Empty")
 	private String flight_code;
+	
 	@Column(length=20)
+	@NotNull(message="Flight Name cannot be null")
+	@NotEmpty(message="Flight Name cannot be empty")
 	private String flight_name;
 	@Column(length=20)
+	@NotNull(message="Source Cannot be Null")
+	@NotEmpty(message="Source Cannot be Empty")
 	private String source;
+	
 	@Column(length=20)
+	@NotNull(message="Destination Cannot be Null")
+	@NotEmpty(message="Destination Cannot be Empty")
 	private String destination;
-	@Column(name="startDate")	
+	
+	@Column(name="startDate")
+	@NotNull(message="Date Cannot be Null")
 	private Timestamp date;
+	
+	@NotNull(message="Price cannot be null")
+	@Min(value = 0,message="Price cannot be less than 0")
 	private int price;
-	private Integer vacant_seats;
+	
+	@NotNull(message="Seats cannot be null")
+	@Min(value=0,message="Seats cannot be negative")
+	private int vacant_seats;
+	
+	@NotNull(message="Check In Baggage cannot be null")
+	@Min(value=0,message="Check In Baggage cannot be negative")
+	private int checkinbaggage;
+	
+	@NotNull(message="Cargo Baggage cannot be null")
+	@Min(value=0,message="Cargo Baggage cannot be negative")
+	private int cargobaggage;
+	
 	@OneToMany(mappedBy="flight",cascade=CascadeType.MERGE)
 	private Set<Ticket> tickets = new HashSet<>();
 	
@@ -40,65 +70,121 @@ public class Flight implements Serializable{
 		
 	}
 	
-	public Flight(String flight_name, String source, String destination,Timestamp date, int price, String flight_code) {
+	
+	public Flight(@NotEmpty(message = "Flight Code cannot be Empty") String flight_code,
+			@NotNull(message = "Flight Name cannot be null") @NotEmpty(message = "Flight Name cannot be empty") @Min(value = 0, message = "Flight Name cannot be negative") String flight_name,
+			@NotNull(message = "Source Cannot be Null") @NotEmpty(message = "Source Cannot be Empty") String source,
+			@NotNull(message = "Destination Cannot be Null") @NotEmpty(message = "Destination Cannot be Empty") String destination,
+			@NotNull(message = "Date Cannot be Null") Timestamp date,
+			@NotNull(message = "Price cannot be null") @Min(value = 0, message = "Price cannot be less than 0") int price,
+			@NotNull(message = "Seats cannot be null") @Min(value = 0, message = "Seats cannot be negative") int vacant_seats,
+			@NotNull(message = "Check In Baggage cannot be null") @Min(value = 0, message = "Check In Baggage cannot be negative") int checkinbaggage,
+			@NotNull(message = "Cargo Baggage cannot be null") @Min(value = 0, message = "Cargo Baggage cannot be negative") int cargobaggage) {
+		
+		this.flight_code = flight_code;
 		this.flight_name = flight_name;
 		this.source = source;
 		this.destination = destination;
 		this.date = date;
 		this.price = price;
-		this.flight_code = flight_code;
-		this.vacant_seats = 50;
+		this.vacant_seats = vacant_seats;
+		this.checkinbaggage = checkinbaggage;
+		this.cargobaggage = cargobaggage;
 	}
-	
+
+
+
+
 	public String getFlight_code() {
 		return flight_code;
 	}
+
+
 	public void setFlight_code(String flight_code) {
 		this.flight_code = flight_code;
 	}
+
+
 	public String getFlight_name() {
 		return flight_name;
 	}
+
+
 	public void setFlight_name(String flight_name) {
 		this.flight_name = flight_name;
 	}
+
+
 	public String getSource() {
 		return source;
 	}
+
+
 	public void setSource(String source) {
 		this.source = source;
 	}
+
+
 	public String getDestination() {
 		return destination;
 	}
+
+
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
+
+
 	public Timestamp getDate() {
 		return date;
 	}
+
+
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+
+
 	public int getPrice() {
 		return price;
 	}
+
+
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public Integer getVacant_seats() {
+
+
+	public int getVacant_seats() {
 		return vacant_seats;
 	}
-	public void setVacant_seats(Integer vacant_seats) {
+
+
+	public void setVacant_seats(int vacant_seats) {
 		this.vacant_seats = vacant_seats;
 	}
-	public Set<Ticket> getTickets() {
-		return tickets;
+
+
+	public int getCheckinbaggage() {
+		return checkinbaggage;
 	}
-	public void setTickets(Set<Ticket> tickets) {
-		this.tickets = tickets;
+
+
+	public void setCheckinbaggage(int checkinbaggage) {
+		this.checkinbaggage = checkinbaggage;
 	}
-	
+
+
+	public int getCargobaggage() {
+		return cargobaggage;
+	}
+
+
+	public void setCargobaggage(int cargobaggage) {
+		this.cargobaggage = cargobaggage;
+	}
+
+
 	@Override
 	public String toString()
 	{
@@ -115,7 +201,7 @@ public class Flight implements Serializable{
 	public void addTicket(Ticket ticket)
 	{
 		ticket.setFlight(this);
-		this.getTickets().add(ticket);
+		this.tickets.add(ticket);
 	}
 	
 }

@@ -1,10 +1,7 @@
 package com.cg.flight.requests;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 
-@Component
-@RequestScope
+
 public class LoginRequest {
 	private String username;
 	private String password;

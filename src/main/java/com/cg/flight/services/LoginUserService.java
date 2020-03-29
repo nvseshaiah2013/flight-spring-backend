@@ -10,23 +10,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.cg.flight.dao.UserDaoJpa;
+import com.cg.flight.dao.UserDao;
+
 
 @Service
 public class LoginUserService implements UserDetailsService {
 
-	@Autowired private UserDaoJpa userDao;
+	@Autowired private UserDao userDao;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<com.cg.flight.entities.User> user = userDao.findById(username);
+		com.cg.flight.entities.User user = userDao.findById(username);
 		
-		if(!user.isPresent())
+		if(user==null)
 		{
 			throw new UsernameNotFoundException(username);
 		}
 		else			
-			return new User(user.get().getUsername(),user.get().getPassword(),new ArrayList<>());
+			return new User(user.getUsername(),user.getPassword(),new ArrayList<>());
 	}
 
 }

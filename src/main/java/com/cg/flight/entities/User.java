@@ -17,6 +17,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 @Entity
@@ -76,6 +78,8 @@ public class User implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -89,9 +93,9 @@ public class User implements Serializable {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public Set<Ticket> getTickets() {
-		return tickets;
-	}
+//	public Set<Ticket> getTickets() {
+//		return tickets;
+//	}
 	
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
@@ -101,7 +105,7 @@ public class User implements Serializable {
 	public void addTicket(Ticket ticket)
 	{
 		ticket.setUser(this);
-		this.getTickets().add(ticket);
+		this.tickets.add(ticket);
 	}
 
 	
