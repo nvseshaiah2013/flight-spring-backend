@@ -17,7 +17,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -60,12 +59,18 @@ public class User implements Serializable {
 		
 	}
 	
-	public User(String name, String username, String password,int age) {	
+	public User(
+			@NotNull(message = "Name cannot be null") @NotEmpty(message = "Name cannot be empty") @Pattern(regexp = "[A-Za-z]+([\\ A-Za-z]+)*", message = "Name must start with Capital Letter.\nIt should contain only letters") String name,
+			@NotNull(message = "Username cannot be null") @NotEmpty(message = "Username cannot be empty") @Email(message = "Username must be a valid e-mail Id") String username,
+			@NotNull(message = "Password cannot be null") @NotEmpty(message = "Password cannot be empty") String password,
+			@NotNull @Min(value = 10, message = "Minimum Age of User must be 10") @Max(value = 100, message = "Maximum Age of User must be 100") int age
+	) {
 		this.name = name;
 		this.username = username;
 		this.password = password;
 		this.age = age;
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -79,10 +84,11 @@ public class User implements Serializable {
 		this.username = username;
 	}
 	
-	@JsonIgnore
+	
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}

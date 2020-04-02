@@ -1,8 +1,5 @@
 package com.cg.flight.dao;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -62,7 +59,7 @@ public class FlightDao  implements IFlightDao
 	}
 
 	@Override
-	public boolean bookFlight(Flight flight, User user,BookFlightRequest request) {
+	public Ticket bookFlight(Flight flight, User user,BookFlightRequest request) {
 		try {
 			
 		Ticket ticket = new Ticket(flight,user,request.getName(),request.getAge(),request.getGender(),request.getIdType(),request.getIdNo());
@@ -70,12 +67,12 @@ public class FlightDao  implements IFlightDao
 		flight.addTicket(ticket);
 		user.addTicket(ticket);
 		entityManager.persist(ticket);
+		return ticket;
 		}
 		catch(Exception e)
 		{
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	@Override

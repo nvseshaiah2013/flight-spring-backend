@@ -1,6 +1,7 @@
 package com.cg.flight.controllers;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.flight.entities.User;
 import com.cg.flight.requests.LoginRequest;
+import com.cg.flight.responses.ErrorMessage;
+import com.cg.flight.responses.GlobalResponse;
 import com.cg.flight.responses.LoginResponse;
 import com.cg.flight.services.IService;
 import com.cg.flight.services.JwtUtil;
@@ -42,30 +46,22 @@ public class UserController {
 	@Autowired 
 	private IService userService;
 	
-//	@GetMapping(value="/a")
-//	public ResponseEntity<String> getUsers()
-//	{
-//		System.out.println("ho");
-//		return ResponseEntity.ok("Fetched");
-//	}
-//	
-//	@PostMapping(value="/sample",produces=MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<String> getRespo()
-//	{
-//		System.out.println("ho");
-//		return ResponseEntity.ok("{\"message\":\"Sample\"}");
-//	}
-	
 	@PostMapping(value="/add",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addUser(@Valid @RequestBody User user)
+	public ResponseEntity<Object> addUser(@Valid @RequestBody User user)
 	{
 		System.out.println("Add");
-		userService.registerUser(user);
-		return new ResponseEntity<String>("{\"message\":\"Mission Successfull\"}",HttpStatus.CREATED);
+		Boolean status = userService.registerUser(user);
+		if(status)
+		{
+			return new ResponseEntity<Object>(new GlobalResponse("Register User","User Registered Successfully"),HttpStatus.CREATED);
+		}
+		else {			
+			return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.UNAUTHORIZED,"Username already Exists"),HttpStatus.UNAUTHORIZED);
+		}
 	}
 	
 	@PostMapping(value="/authenticate",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
+	public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 
 		try {
 			authManager.authenticate(
@@ -81,15 +77,24 @@ public class UserController {
 				.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String jwt = jwtUtil.generateToken(userDetails);
+		User user = userService.findById(authenticationRequest.getUsername());
 
-		return new ResponseEntity(new LoginResponse(jwt),HttpStatus.OK);
+		return new ResponseEntity<Object>(new LoginResponse(jwt,user),HttpStatus.OK);
 	}
 	
-//	
-//	@RequestMapping(value="/**")
-//	public ResponseEntity<String> notFound()
-//	{
-//		
-//		return new ResponseEntity<String>("The Requested Page does Not Exist As of Now",HttpStatus.NOT_FOUND);
-//	}
+	@PostMapping(value="/getUser",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getUserByToken(HttpServletRequest request)
+	{
+		final String token = request.getHeader("Authorization");
+		final String username = jwtUtil.extractUsername(token.substring(7));
+		User user = userService.findById(username);
+		return new ResponseEntity<Object>(user,HttpStatus.OK);
+		
+	}
+	
+	@ExceptionHandler({BadCredentialsException.class})
+	public ResponseEntity<Object> handleException(Exception e) {
+		return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.FORBIDDEN,e.getLocalizedMessage()),HttpStatus.FORBIDDEN);
+	}
+
 }

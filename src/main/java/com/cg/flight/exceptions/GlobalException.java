@@ -18,10 +18,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class UserValidationException extends ResponseEntityExceptionHandler {
+public class GlobalException extends ResponseEntityExceptionHandler {
 
 	@Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
 
@@ -42,9 +42,7 @@ public class UserValidationException extends ResponseEntityExceptionHandler {
         });
 
         body.put("errors", errors);
-
         return new ResponseEntity<>(body, headers, status);
 
     }
-		
 }

@@ -1,19 +1,30 @@
 package com.cg.flight.responses;
 
-import org.springframework.stereotype.Component;
+import com.cg.flight.entities.User;
 
 
 public class LoginResponse {
 	private String jwt;
-	public LoginResponse(String jwt)
-	{
-		this.jwt = jwt;
-	}
+	private User user;
+	
 	public LoginResponse()
 	{
 		
 	}
 	
+	public LoginResponse(String jwt, User user) {
+		this.jwt = jwt;
+		this.user = user;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public String getJwt()
 	{
 		return jwt;

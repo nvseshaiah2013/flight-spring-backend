@@ -14,9 +14,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="ticket_master")
@@ -89,6 +87,76 @@ public class Ticket implements Serializable {
 
 
 
+	public String getName() {
+		return name;
+	}
+
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+
+
+
+	public String getGender() {
+		return gender;
+	}
+
+
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+
+
+	public String getIdType() {
+		return idType;
+	}
+
+
+
+
+	public void setIdType(String idType) {
+		this.idType = idType;
+	}
+
+
+
+
+	public String getIdNo() {
+		return idNo;
+	}
+
+
+
+
+	public void setIdNo(String idNo) {
+		this.idNo = idNo;
+	}
+
+
+
+
 	public int getTicket_id() {
 		return ticket_id;
 	}
@@ -107,6 +175,7 @@ public class Ticket implements Serializable {
 	public void setFlight(Flight flight) {
 		this.flight = flight;
 	}
+	@JsonIgnore
 	public User getUser() {
 		return user;
 	}

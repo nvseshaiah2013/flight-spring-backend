@@ -16,7 +16,6 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public Boolean addUser(User user) {
-		System.out.println("H");
 		String salt = BCrypt.gensalt(10);
 		user.setPassword(BCrypt.hashpw(user.getPassword(), salt));
 		entityManager.persist(user);

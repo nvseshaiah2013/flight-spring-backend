@@ -30,6 +30,8 @@ public class TicketDao implements ITicketDao {
 
 	@Override
 	public boolean cancelTicket(Ticket ticket) {
+		if(ticket.getStatus().equals("Cancelled"))
+			return false;
 		ticket.setStatus("Cancelled");
 		ticket.getFlight().setVacant_seats(ticket.getFlight().getVacant_seats()+1);
 		Ticket status = entityManager.merge(ticket);
