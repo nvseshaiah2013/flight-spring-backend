@@ -18,8 +18,7 @@ public class LoginUserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		com.cg.flight.entities.User user = userDao.findById(username);
-		
+		com.cg.flight.entities.User user = userDao.findById(username);		
 		if(user==null)
 		{
 			throw new UsernameNotFoundException(username);

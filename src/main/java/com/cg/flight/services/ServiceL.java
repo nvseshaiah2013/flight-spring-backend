@@ -90,5 +90,14 @@ public class ServiceL implements IService{
 		return ticketRepo.getTickets(user);
 		
 	}
-
+	
+	@Override
+	public List<String> getSources(){
+		return flightRepo.getSources();
+	}
+	
+	@Override
+	public List<String> getDestinations(){
+		return flightRepo.getDestinations();
+	}
 }

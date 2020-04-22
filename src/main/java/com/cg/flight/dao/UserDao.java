@@ -1,13 +1,10 @@
 package com.cg.flight.dao;
 
 import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
-
 import com.cg.flight.entities.User;
-import com.cg.flight.requests.LoginRequest;
 
 @Repository
 public class UserDao implements IUserDao {
@@ -20,12 +17,6 @@ public class UserDao implements IUserDao {
 		user.setPassword(BCrypt.hashpw(user.getPassword(), salt));
 		entityManager.persist(user);
 		return true;
-	}
-
-	@Override
-	public String authenticateUser(LoginRequest request) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

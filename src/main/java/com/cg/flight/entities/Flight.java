@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-
-
-
 
 @Entity
 @Table(name="flight_master")
@@ -33,6 +28,7 @@ public class Flight implements Serializable{
 	@NotNull(message="Flight Name cannot be null")
 	@NotEmpty(message="Flight Name cannot be empty")
 	private String flight_name;
+	
 	@Column(length=20)
 	@NotNull(message="Source Cannot be Null")
 	@NotEmpty(message="Source Cannot be Empty")
@@ -63,6 +59,11 @@ public class Flight implements Serializable{
 	@Min(value=0,message="Cargo Baggage cannot be negative")
 	private int cargobaggage;
 	
+	@Column(length=20)
+	@NotNull(message="Image path cannot be null")
+	@NotEmpty(message="image path cannot be empty")
+	private String image;
+	
 	@OneToMany(mappedBy="flight",cascade=CascadeType.MERGE)
 	private Set<Ticket> tickets = new HashSet<>();
 	
@@ -79,7 +80,8 @@ public class Flight implements Serializable{
 			@NotNull(message = "Price cannot be null") @Min(value = 0, message = "Price cannot be less than 0") int price,
 			@NotNull(message = "Seats cannot be null") @Min(value = 0, message = "Seats cannot be negative") int vacant_seats,
 			@NotNull(message = "Check In Baggage cannot be null") @Min(value = 0, message = "Check In Baggage cannot be negative") int checkinbaggage,
-			@NotNull(message = "Cargo Baggage cannot be null") @Min(value = 0, message = "Cargo Baggage cannot be negative") int cargobaggage) {
+			@NotNull(message = "Cargo Baggage cannot be null") @Min(value = 0, message = "Cargo Baggage cannot be negative") int cargobaggage,
+			@NotNull(message="Image path cannot be null") @NotEmpty(message="image path cannot be empty") String image) {
 		
 		this.flight_code = flight_code;
 		this.flight_name = flight_name;
@@ -90,7 +92,18 @@ public class Flight implements Serializable{
 		this.vacant_seats = vacant_seats;
 		this.checkinbaggage = checkinbaggage;
 		this.cargobaggage = cargobaggage;
+		this.image = image;
 	}
+	
+	public String getImage() {
+		return image;
+	}
+	
+	
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 
 
 

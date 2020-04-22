@@ -23,11 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 	private JwtFilter jwtFilter;
 	
 	
-	  @Override protected void configure(AuthenticationManagerBuilder auth) throws
-	  Exception { 
-		  auth.userDetailsService(loginUserService);
-	  
+	 @Override 
+	 protected void configure(AuthenticationManagerBuilder auth) throws Exception { 
+		  auth.userDetailsService(loginUserService);  
 	 }
+	 
+	 
 	 @Override 
 	 protected void configure(HttpSecurity http) throws Exception
 	 {

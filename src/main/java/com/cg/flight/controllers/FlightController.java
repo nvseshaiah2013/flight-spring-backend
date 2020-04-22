@@ -49,6 +49,15 @@ public class FlightController {
 		return new ResponseEntity<Object>(flights,HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/sources",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<String>> getSources(){
+		return new ResponseEntity<>(flightService.getSources(),HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/destinations",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<String>> getDestinations(){
+		return new ResponseEntity<>(flightService.getDestinations(),HttpStatus.OK);
+	}
 	
 	@PostMapping(value="/book",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> bookFlight(HttpServletRequest request) throws IOException
