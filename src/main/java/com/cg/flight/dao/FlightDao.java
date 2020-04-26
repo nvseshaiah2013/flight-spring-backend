@@ -12,8 +12,16 @@ import com.cg.flight.requests.BookFlightRequest;
 
 @Repository
 public class FlightDao implements IFlightDao {
+	
+	
 	@Autowired
 	public EntityManager entityManager;
+	
+	/*
+	 * Function to Get the List of Flights
+	 * Function Accepts Source as String, Destination as String, date as String
+	 * Returns a List of Flights based on the Query combination of source,destination and date.
+	 * */
 
 	@Override
 	public List<Flight> getFlights(String source, String destination, String date) {

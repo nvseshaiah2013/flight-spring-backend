@@ -18,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.cg.flight.services.JwtUtil;
 import com.cg.flight.services.LoginUserService;
 
+import io.jsonwebtoken.JwtException;
+
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -43,6 +45,9 @@ public class JwtFilter extends OncePerRequestFilter {
 		String username = null;
 		String jwt = null;
 		
+		try {
+			
+		
 		if(authHeader!=null && authHeader.startsWith("Bearer "))
 		{
 			jwt = authHeader.substring(7);
@@ -59,6 +64,13 @@ public class JwtFilter extends OncePerRequestFilter {
 				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
+		}
+		
+		}
+		catch(JwtException e) {
+			response.setContentType("application/json");
+			response.getWriter().write("\"message\":\"Jwt Error\"");
+			return;
 		}
 		filterChain.doFilter(request, response);
 	}

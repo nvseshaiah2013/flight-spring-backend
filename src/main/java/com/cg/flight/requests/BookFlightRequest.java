@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookFlightRequest {
+	
+	
 	private String username;
 	private String flight_code;
 	private String name;
