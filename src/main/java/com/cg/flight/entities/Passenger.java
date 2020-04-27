@@ -56,6 +56,10 @@ public class Passenger implements Serializable{
     @ManyToOne
     @JoinColumn(name = "username")
     private User user;
+
+    @Column(columnDefinition = "integer default 1")
+    @NotNull
+    private int isValid;
     
 
     public String getIdType() {
@@ -102,19 +106,7 @@ public class Passenger implements Serializable{
         
     }
 
-    public Passenger(
-            @NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") final String idType,
-            @NotNull(message = "Id Number Cannot be Omitted") @NotEmpty(message = "Id Number Cannot be Left Empty") final String idNo,
-            @NotNull(message = "Name Cannot be Omitted") @NotEmpty(message = "Name Cannot be Left Empty") final String name,
-            @NotNull(message = "Type Of Id Cannot be Omitted") @Min(value = 5, message = "Age must be greater than 5") final int age,
-            @NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") final String gender) {
-        this.idType = idType;
-        this.idNo = idNo;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-    }
-
+   
     public int getPassenger_id() {
         return passenger_id;
     }
@@ -137,6 +129,35 @@ public class Passenger implements Serializable{
         return "Passenger [age=" + age + ", gender=" + gender + ", idNo=" + idNo + ", idType=" + idType + ", name="
                 + name + ", passenger_id=" + passenger_id + ", user=" + user + "]";
     }
+
+    public Passenger(
+            @NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") String idType,
+            @NotNull(message = "Id Number Cannot be Omitted") @NotEmpty(message = "Id Number Cannot be Left Empty") String idNo,
+            @NotNull(message = "Name Cannot be Omitted") @NotEmpty(message = "Name Cannot be Left Empty") String name,
+            @NotNull(message = "Age Cannot be Omitted") @Min(value = 5, message = "Age must be greater than 5") int age,
+            @NotNull(message = "Gender Cannot be Omitted") @NotEmpty(message = "Gender Cannot be Left Empty") @Pattern(regexp = "Male|Female|Other", message = "Gender can be Male,Female,Other only") String gender,
+            int isValid) {
+        this.idType = idType;
+        this.idNo = idNo;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.isValid = isValid;
+    }
+
+    public int getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(int isValid) {
+        this.isValid = isValid;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+ 
 
     
 }

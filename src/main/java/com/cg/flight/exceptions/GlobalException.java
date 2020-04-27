@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -64,5 +65,13 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     @ExceptionHandler({NotFound.class})
     public ResponseEntity<Object> handleNotFound(NotFound exception){
         return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.NOT_FOUND,exception.getMessage()),HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handleGlobalException(Exception exception){
+        return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()),
+                HttpStatus.BAD_REQUEST);
+
     }
 }

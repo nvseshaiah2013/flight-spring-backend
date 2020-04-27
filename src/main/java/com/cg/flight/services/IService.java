@@ -17,9 +17,11 @@ public interface IService {
 	
 	List<Flight> getFlights(String source,String destination,String date);
 
-	void updatePassenger(Passenger passenger,String username);
+	void updatePassenger(Passenger passenger,String username,int id) throws Exception;
 
 	List<Passenger> getPassengers(String username );
+
+	Passenger findPassengerById(int id) throws Exception;
 	
 	boolean cancelTicket(int ticketId,String username);
 	
@@ -36,4 +38,6 @@ public interface IService {
 	LoginResponse getAuthenticationToken(LoginRequest authenticationRequest) throws Exception;
 
 	void addPassenger(Passenger passenger, String username) throws Exception;
+
+	void deletePassenger(int id, String username) throws Exception;
 }

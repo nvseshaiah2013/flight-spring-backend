@@ -76,6 +76,14 @@ public class ServiceL implements IService {
 	}
 
 	@Override
+	public Passenger findPassengerById(int id) throws Exception {
+		Passenger passenger = userRepo.findPassengerById(id);
+		if(passenger == null)
+			throw new NotFound("Passenger Not Found");
+		return passenger;
+	}
+
+	@Override
 	@Transactional
 	public boolean cancelTicket(int ticketId, String username) {
 		Ticket ticket = ticketRepo.findById(ticketId);
@@ -142,17 +150,24 @@ public class ServiceL implements IService {
 
 	@Override
 	@Transactional
-	public void updatePassenger(Passenger passenger,String username){
-		userRepo.updatePassenger(passenger, username);
+	public void updatePassenger(Passenger passenger,String username,int id) throws Exception{
+		Passenger passenger_old = this.findPassengerById(id);
+		userRepo.updatePassenger(passenger, passenger_old,username);
 	}
 
 	@Override
 	@Transactional
 	public void addPassenger(Passenger passenger, String username) throws Exception {
 		User user = findById(username);
-		if(user == null)
-			throw new NotFound("User with given username Not Found");
 		this.userRepo.addPassenger(passenger, user);
 
+	}
+
+	@Override
+	@Transactional
+	public void deletePassenger(int id, String username) throws Exception {
+		User user  = findById(username);
+		Passenger passenger  = findPassengerById(id);
+		this.userRepo.deletePassenger(passenger, user);
 	}
 }

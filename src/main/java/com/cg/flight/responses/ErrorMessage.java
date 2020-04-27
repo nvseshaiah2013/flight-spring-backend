@@ -1,8 +1,12 @@
 package com.cg.flight.responses;
 
+import java.io.Serializable;
+
 import org.springframework.http.HttpStatus;
 
-public class ErrorMessage {
+public class ErrorMessage implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private HttpStatus status;
 	private String message;
 	public HttpStatus getStatus() {
@@ -21,6 +25,11 @@ public class ErrorMessage {
 	public ErrorMessage(HttpStatus status, String message) {
 		this.status = status;
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "{ \"message\":" + message + ", \"status\":" + status + "}";
 	}
 	
 	
