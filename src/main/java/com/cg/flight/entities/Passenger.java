@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "passenger_master")
+@Table(name = "PASSENGER_MASTER")
 public class Passenger implements Serializable{
     
     private static final long serialVersionUID = 1L;
@@ -27,42 +28,68 @@ public class Passenger implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int passenger_id;
 
-    @Column(length = 15)
+    @Column(name="ID_TYPE",length = 15)
     @NotNull(message="Type Of Id Cannot be Omitted")
     @NotEmpty(message="Type of Id Cannot be Left Empty")
+    @Pattern(regexp="PAN|DL|Passport|Aadhar",message="Accepted Id Types: PAN,Aadhar,Passport,Driving License")
     private String idType;
 
-    @Column(length = 30)
+    @Column(name="ID_NO",length = 30)
     @NotNull(message = "Id Number Cannot be Omitted")
     @NotEmpty(message = "Id Number Cannot be Left Empty")
     private String idNo;
 
-    @Column(length = 30)
+    @Column(name="PASSENGER_NAME",length = 50)
     @NotNull(message = "Name Cannot be Omitted")
     @NotEmpty(message = "Name Cannot be Left Empty")
+    @Pattern(regexp="([a-zA-Z]+[ ]?)+",message="Accepted Name can only contain alphabets, with single space separeted.")
     private String name;
 
-    @Column(length = 15)
+    @Column(name="PASSENGER_AGE")
     @NotNull(message = "Age Cannot be Omitted")
-    @Min(value=5,message="Age must be greater than 5")
+    @Min(value=5,message="Age must be greater than or equal to 5")
+    @Max(value=122 ,message="Age must be less than or equal to 122")
     private int age;
 
-    @Column(length = 6)
+    @Column(name="PASSENGER_GENDER",length = 6)
     @NotNull(message = "Gender Cannot be Omitted")
     @NotEmpty(message = "Gender Cannot be Left Empty")
     @Pattern(regexp = "Male|Female|Other",message = "Gender can be Male,Female,Other only")
     private String gender;
 
     @ManyToOne
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "username",nullable=false)
     private User user;
-
-    @Column(columnDefinition = "integer default 1")
-    @NotNull
-    private int isValid;
+   
     
+    public Passenger(
+			@NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") @Pattern(regexp = "PAN|DL|Passport|Aadhar") String idType,
+			@NotNull(message = "Id Number Cannot be Omitted") @NotEmpty(message = "Id Number Cannot be Left Empty") String idNo,
+			@NotNull(message = "Name Cannot be Omitted") @NotEmpty(message = "Name Cannot be Left Empty") String name,
+			@NotNull(message = "Age Cannot be Omitted") @Min(value = 5, message = "Age must be greater than or equal to 5") @Max(value = 122, message = "Age must be less than or equal to 122") int age,
+			@NotNull(message = "Gender Cannot be Omitted") @NotEmpty(message = "Gender Cannot be Left Empty") @Pattern(regexp = "Male|Female|Other", message = "Gender can be Male,Female,Other only") String gender,
+			User user) {
+		this.idType = idType;
+		this.idNo = idNo;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+		this.user = user;
+	}
+	public Passenger(
+			@NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") @Pattern(regexp = "PAN|DL|Passport|Aadhar") String idType,
+			@NotNull(message = "Id Number Cannot be Omitted") @NotEmpty(message = "Id Number Cannot be Left Empty") String idNo,
+			@NotNull(message = "Name Cannot be Omitted") @NotEmpty(message = "Name Cannot be Left Empty") String name,
+			@NotNull(message = "Age Cannot be Omitted") @Min(value = 5, message = "Age must be greater than or equal to 5") @Max(value = 122, message = "Age must be less than or equal to 122") int age,
+			@NotNull(message = "Gender Cannot be Omitted") @NotEmpty(message = "Gender Cannot be Left Empty") @Pattern(regexp = "Male|Female|Other", message = "Gender can be Male,Female,Other only") String gender) {
+		this.idType = idType;
+		this.idNo = idNo;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+	}
 
-    public String getIdType() {
+	public String getIdType() {
         return idType;
     }
 
@@ -104,9 +131,7 @@ public class Passenger implements Serializable{
 
     public Passenger(){
         
-    }
-
-   
+    }   
     public int getPassenger_id() {
         return passenger_id;
     }
@@ -128,36 +153,5 @@ public class Passenger implements Serializable{
     public String toString() {
         return "Passenger [age=" + age + ", gender=" + gender + ", idNo=" + idNo + ", idType=" + idType + ", name="
                 + name + ", passenger_id=" + passenger_id + ", user=" + user + "]";
-    }
-
-    public Passenger(
-            @NotNull(message = "Type Of Id Cannot be Omitted") @NotEmpty(message = "Type of Id Cannot be Left Empty") String idType,
-            @NotNull(message = "Id Number Cannot be Omitted") @NotEmpty(message = "Id Number Cannot be Left Empty") String idNo,
-            @NotNull(message = "Name Cannot be Omitted") @NotEmpty(message = "Name Cannot be Left Empty") String name,
-            @NotNull(message = "Age Cannot be Omitted") @Min(value = 5, message = "Age must be greater than 5") int age,
-            @NotNull(message = "Gender Cannot be Omitted") @NotEmpty(message = "Gender Cannot be Left Empty") @Pattern(regexp = "Male|Female|Other", message = "Gender can be Male,Female,Other only") String gender,
-            int isValid) {
-        this.idType = idType;
-        this.idNo = idNo;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.isValid = isValid;
-    }
-
-    public int getIsValid() {
-        return isValid;
-    }
-
-    public void setIsValid(int isValid) {
-        this.isValid = isValid;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
- 
-
-    
+    }    
 }

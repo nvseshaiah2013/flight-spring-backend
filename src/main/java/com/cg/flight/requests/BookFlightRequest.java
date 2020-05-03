@@ -1,17 +1,40 @@
 package com.cg.flight.requests;
 
-import org.springframework.stereotype.Component;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-@Component
 public class BookFlightRequest {
 	
-	
 	private String username;
+	@NotNull(message = "Flight Code is Missing")
+	@NotEmpty(message = "Flight Code is left Empty")
 	private String flight_code;
+
+	@NotNull(message = "Passenger Name is Missing")
+	@NotEmpty(message = "Passenger Name is left Empty")
+	@Pattern(regexp="([a-zA-Z]+[ ]?)+",message="Name can only contain alphabets, Single space separeted only.")
 	private String name;
+
+	@NotNull(message = "Passenger Age is Missing")
+	@Min(value = 5, message = "Passenger Age cannot be less than 5")
+	@Max(value = 122, message = "Passenger Age cannot be more than 122")
 	private int age;
+
+	@NotNull(message = "Passenger Gender is Missing")
+	@NotEmpty(message = "Passenger Gender is left Empty")
+	@Pattern(regexp ="Male|Female|Other")
 	private String gender;
+
+	@NotNull(message = "Passenger Id Type is Missing")
+	@NotEmpty(message = "Passenger Id Type is left Empty")
+	@Pattern(regexp = "PAN|DL|Passport|Aadhar")
 	private String idType;
+
+	@NotNull(message = "Passenger Id Number is Missing")
+	@NotEmpty(message = "Passenger Id Number is left Empty")
 	private String idNo;
 	
 	
@@ -20,13 +43,19 @@ public class BookFlightRequest {
 		
 	}	
 	
-	public BookFlightRequest(String name, int age, String gender,String idType, String idNo,String flight_code) {
+	public BookFlightRequest(
+			@NotNull(message = "Flight Code is Missing") @NotEmpty(message = "Flight Code is left Empty") String flight_code,
+			@NotNull(message = "Passenger Name is Missing") @NotEmpty(message = "Passenger Name is left Empty") String name,
+			@NotNull(message = "Passenger Age is Missing") @Min(value = 5, message = "Passenger Age cannot be less than 5") @Max(value = 122, message = "Passenger Age cannot be more than 122") int age,
+			@NotNull(message = "Passenger Gender is Missing") @NotEmpty(message = "Passenger Gender is left Empty") @Pattern(regexp = "Male|Female|Other") String gender,
+			@NotNull(message = "Passenger Id Type is Missing") @NotEmpty(message = "Passenger Id Type is left Empty") @Pattern(regexp = "PAN|DL|Passport|Aadhar") String idType,
+			@NotNull(message = "Passenger Id Number is Missing") @NotEmpty(message = "Passenger Id Number is left Empty") String idNo) {
 		this.flight_code = flight_code;
 		this.name = name;
 		this.age = age;
+		this.gender = gender;
 		this.idType = idType;
 		this.idNo = idNo;
-		this.gender = gender;
 	}
 
 	public String getGender() {

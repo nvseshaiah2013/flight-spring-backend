@@ -3,11 +3,12 @@ package com.cg.flight.exceptions;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-
 import java.util.Map;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,8 @@ import io.jsonwebtoken.JwtException;
 
 @RestControllerAdvice
 public class GlobalException extends ResponseEntityExceptionHandler {
+	
+	private static Logger logger = LoggerFactory.getLogger(GlobalException.class);
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -47,29 +50,39 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         	}
         });
 
-        body.put("errors", errors);
-        return new ResponseEntity<>(body, headers, status);
+        String result = "";
+        Iterator<Map.Entry<String,String>> iterator = errors.entrySet().iterator();
+        while(iterator.hasNext()) {
+        	Map.Entry<String, String> entry = iterator.next();
+        	result = result + entry.getKey() + "->" +entry.getValue() + "\n";
+        }
+        logger.error(result);
+        return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST,result),HttpStatus.BAD_REQUEST);
 
     }
 	
-	@ExceptionHandler({BadCredentialsException.class})
-	public ResponseEntity<Object> handleWrongPassword(BadCredentialsException exception, WebRequest request){
+    @ExceptionHandler({BadCredentialsException.class,InvalidRequestException.class,InvalidPassengerException.class})
+	public ResponseEntity<Object> handleWrongPassword(Exception exception, WebRequest request){
+    	logger.error(exception.getMessage());
 		return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.FORBIDDEN,exception.getMessage()),HttpStatus.FORBIDDEN);
 	}
-	
-	@ExceptionHandler({UserRegistrationException.class,JwtException.class})
-	public ResponseEntity<Object> handleUserRegistration(UserRegistrationException exception){
+    
+	@ExceptionHandler({UserRegistrationException.class,JwtException.class,NoVacancyException.class})
+	public ResponseEntity<Object> handleUserRegistration(Exception exception){
+		logger.error(exception.getMessage());
 		return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage()),HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler({NotFound.class})
     public ResponseEntity<Object> handleNotFound(NotFound exception){
+    	logger.error(exception.getMessage());
         return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.NOT_FOUND,exception.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handleGlobalException(Exception exception){
+    public ResponseEntity<Object> handleServerException(Exception exception){
+    	logger.error(exception.getMessage());
         return new ResponseEntity<Object>(new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()),
                 HttpStatus.BAD_REQUEST);
 

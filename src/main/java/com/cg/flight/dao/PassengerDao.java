@@ -1,51 +1,32 @@
 package com.cg.flight.dao;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
 import com.cg.flight.entities.Passenger;
-import com.cg.flight.entities.Ticket;
 import com.cg.flight.entities.User;
 import com.cg.flight.exceptions.NotFound;
 
 @Repository
-public class UserDao implements IUserDao {
-
-	@Autowired
+public class PassengerDao implements IPassengerDao{
+	
+	@Autowired	
 	private EntityManager entityManager;
-
+	
+	
 	@Override
-	public Boolean addUser(User user) {
-		String salt = BCrypt.gensalt(10);
-		user.setPassword(BCrypt.hashpw(user.getPassword(), salt));
-		entityManager.persist(user);
-		return true;
-	}
-
-	@Override
-	public User findById(String username) {
-		User user = entityManager.find(User.class, username);
-		return user;
-	}
-
 	public Passenger findPassengerById(int id){
 		Passenger passenger = entityManager.find(Passenger.class,id);
 		return passenger;
 	}
 
 	@Override
-	public List<Passenger> getPassengers(String username) {
-		String qString = "SELECT passenger FROM Passenger passenger WHERE username=:username";
-		TypedQuery<Passenger> query = entityManager.createQuery(qString, Passenger.class);
-		query.setParameter("username",username);
-		List<Passenger> passengers = query.getResultList();
+	public Set<Passenger> getPassengers(User user) {
+		Set<Passenger> passengers = user.getPassengers();
 		return passengers;
 	}
 
@@ -71,10 +52,5 @@ public class UserDao implements IUserDao {
 		if (passenger == null || !passenger.getUser().getUsername().equals(user.getUsername()))
 			throw new NotFound("Passenger Not Found for Given User");		
 		entityManager.remove(passenger);
-	}
-
-	@Override
-	public Set<Ticket> getTicketsOfUser(User user){
-		return user.getTickets();
 	}
 }

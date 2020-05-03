@@ -1,8 +1,10 @@
 package com.cg.flight.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.cg.flight.entities.Passenger;
+import com.cg.flight.entities.Ticket;
 import com.cg.flight.entities.User;
 
 public interface IUserDao {
@@ -12,4 +14,5 @@ public interface IUserDao {
 	void updatePassenger(Passenger passenger,Passenger passenger_old,String username) throws Exception;
 	void addPassenger(Passenger passenger,User username);
 	void deletePassenger(Passenger passenger,User user) throws Exception;
+	Set<Ticket> getTicketsOfUser(User user);
 }

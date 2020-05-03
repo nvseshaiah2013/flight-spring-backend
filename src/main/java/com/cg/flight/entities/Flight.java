@@ -16,50 +16,54 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="flight_master")
+@Table(name="FLIGHT_MASTER")
 public class Flight implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Column(length=5)
+	@Column(name="FLIGHT_CODE",length=5)
 	@NotEmpty(message="Flight Code cannot be Empty")
 	private String flight_code;
 	
-	@Column(length=20)
+	@Column(name="FLIGHT_NAME",length=20)
 	@NotNull(message="Flight Name cannot be null")
 	@NotEmpty(message="Flight Name cannot be empty")
 	private String flight_name;
 	
-	@Column(length=20)
+	@Column(name="SOURCE",length=20)
 	@NotNull(message="Source Cannot be Null")
 	@NotEmpty(message="Source Cannot be Empty")
 	private String source;
 	
-	@Column(length=20)
+	@Column(name="DESTINATION",length=20)
 	@NotNull(message="Destination Cannot be Null")
 	@NotEmpty(message="Destination Cannot be Empty")
 	private String destination;
 	
-	@Column(name="startDate")
+	@Column(name="START_DATE")
 	@NotNull(message="Date Cannot be Null")
 	private Timestamp date;
 	
+	@Column(name="PRICE")
 	@NotNull(message="Price cannot be null")
-	@Min(value = 0,message="Price cannot be less than 0")
+	@Min(value = 1,message="Price cannot be less than 1")
 	private int price;
 	
+	@Column(name="VACANT_SEATS")
 	@NotNull(message="Seats cannot be null")
 	@Min(value=0,message="Seats cannot be negative")
 	private int vacant_seats;
 	
+	@Column(name="CHECK_IN_BAGGAGE")
 	@NotNull(message="Check In Baggage cannot be null")
 	@Min(value=0,message="Check In Baggage cannot be negative")
 	private int checkinbaggage;
 	
+	@Column(name="CARGO_BAGGAGE")
 	@NotNull(message="Cargo Baggage cannot be null")
 	@Min(value=0,message="Cargo Baggage cannot be negative")
 	private int cargobaggage;
 	
-	@Column(length=20)
+	@Column(name="IMAGE_PATH",length=20)
 	@NotNull(message="Image path cannot be null")
 	@NotEmpty(message="image path cannot be empty")
 	private String image;
@@ -97,16 +101,11 @@ public class Flight implements Serializable{
 	
 	public String getImage() {
 		return image;
-	}
-	
+	}	
 	
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-
-
-
 
 	public String getFlight_code() {
 		return flight_code;
@@ -117,51 +116,41 @@ public class Flight implements Serializable{
 		this.flight_code = flight_code;
 	}
 
-
 	public String getFlight_name() {
 		return flight_name;
 	}
-
 
 	public void setFlight_name(String flight_name) {
 		this.flight_name = flight_name;
 	}
 
-
 	public String getSource() {
 		return source;
 	}
-
 
 	public void setSource(String source) {
 		this.source = source;
 	}
 
-
 	public String getDestination() {
 		return destination;
 	}
-
 
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
 
-
 	public Timestamp getDate() {
 		return date;
 	}
-
 
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 
-
 	public int getPrice() {
 		return price;
 	}
-
 
 	public void setPrice(int price) {
 		this.price = price;

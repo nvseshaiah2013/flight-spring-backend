@@ -4,13 +4,8 @@ package com.cg.flight.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.cg.flight.entities.User;
-import com.cg.flight.requests.LoginRequest;
-import com.cg.flight.responses.GlobalResponse;
-import com.cg.flight.responses.LoginResponse;
-import com.cg.flight.services.IService;
-import com.cg.flight.services.JwtUtil;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cg.flight.entities.User;
+import com.cg.flight.requests.LoginRequest;
+import com.cg.flight.responses.GlobalResponse;
+import com.cg.flight.responses.LoginResponse;
+import com.cg.flight.services.IUserService;
+import com.cg.flight.services.JwtUtil;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RequestMapping(value="/users")
@@ -31,7 +33,9 @@ public class UserController {
 	private JwtUtil jwtUtil;
 	
 	@Autowired 
-	private IService userService;
+	private IUserService userService;
+	
+	static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	/*
 	 * Function To Register A New User to the Database.
@@ -45,6 +49,7 @@ public class UserController {
 	public ResponseEntity<Object> addUser(@Valid @RequestBody User user) throws Exception
 	{
 		userService.registerUser(user);
+		logger.info("User with username " + user.getUsername() + " Name: " + user.getName() + " registered Successfully");
 		return new ResponseEntity<Object>(new GlobalResponse("Register User","User Registered Successfully"),HttpStatus.CREATED);		
 	}
 	
@@ -58,7 +63,8 @@ public class UserController {
 	@PostMapping(value="/authenticate",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> createAuthenticationToken(@Valid @RequestBody LoginRequest authenticationRequest) throws Exception {
 		LoginResponse loginresponse = userService.getAuthenticationToken(authenticationRequest);
-		loginresponse.getUser().setPassword("password");
+		loginresponse.getUser().setPassword("");
+		logger.info("User with username: " + authenticationRequest.getUsername() + " logged in Successfully");
 		return new ResponseEntity<Object>(loginresponse,HttpStatus.OK);
 	}
 	
@@ -77,7 +83,7 @@ public class UserController {
 		final String token = request.getHeader("Authorization");			
 		final String username = jwtUtil.extractUsername(token.substring(7));
 		User user = userService.findById(username);
-		user.setPassword("password");
+		user.setPassword("");
 		return new ResponseEntity<Object>(user,HttpStatus.OK);
 		
 	}	

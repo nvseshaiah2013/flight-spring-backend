@@ -3,6 +3,9 @@ package com.cg.flight.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.cg.flight.entities.Flight;
@@ -12,6 +15,8 @@ import com.cg.flight.requests.BookFlightRequest;
 
 @Repository
 public class FlightDao implements IFlightDao {
+	
+	private static Logger logger = LoggerFactory.getLogger(FlightDao.class);
 	
 	
 	@Autowired
@@ -37,24 +42,20 @@ public class FlightDao implements IFlightDao {
 	}
 
 	@Override
-	public Ticket bookFlight(Flight flight, User user, BookFlightRequest request) {
-		try {
-
+	public Ticket bookFlight(Flight flight, User user, BookFlightRequest request) throws Exception {
 			Ticket ticket = new Ticket(flight, user, request.getName(), request.getAge(), request.getGender(),
 					request.getIdType(), request.getIdNo());
 			flight.setVacant_seats(flight.getVacant_seats() - 1);
 			flight.addTicket(ticket);
 			user.addTicket(ticket);
 			entityManager.persist(ticket);
-			return ticket;
-		} catch (Exception e) {
-			return null;
-		}
+			logger.info("Ticket Booking complete for " + user.getUsername() + " " + flight.getFlight_code());
+			return ticket;		
 	}
 
 
 	@Override
-	public Flight getFlightById(String flight_code) {
+	public Flight getFlightById(String flight_code){
 		return entityManager.find(Flight.class, flight_code);
 	}
 	

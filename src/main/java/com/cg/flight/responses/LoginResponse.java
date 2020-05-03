@@ -12,6 +12,11 @@ public class LoginResponse {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "LoginResponse [jwt=" + jwt + ", user=" + user + "]";
+	}
+
 	public LoginResponse(String jwt, User user) {
 		this.jwt = jwt;
 		this.user = user;
