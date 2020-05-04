@@ -19,10 +19,6 @@ public class TicketDao implements ITicketDao {
 	@Override
 	public Set<Ticket> getTickets(User user) {		
 		Set<Ticket> tickets = user.getTickets();
-//		String qStr = "SELECT ticket FROM Ticket ticket WHERE username=:username";
-//		TypedQuery<Ticket> query = entityManager.createQuery(qStr,Ticket.class);
-//		query.setParameter("username", user.getUsername());
-//		tickets = query.getResultList();
 		return tickets;
 	}
 

@@ -16,5 +16,6 @@ public interface IPassengerService {
 	void addPassenger(Passenger passenger, String username) throws Exception;
 
 	void deletePassenger(int id, String username) throws Exception;
+	
 
 }

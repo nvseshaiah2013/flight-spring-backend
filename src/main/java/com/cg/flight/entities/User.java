@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -63,10 +62,10 @@ public class User implements Serializable {
 	@Pattern(regexp = "Male|Female|Other", message = "Gender can be Male,Female,Other only")
 	private String gender;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "user")
 	private Set<Ticket> tickets = new HashSet<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "user")
 	private Set<Passenger> passengers = new HashSet<>();
 
 	public User() {

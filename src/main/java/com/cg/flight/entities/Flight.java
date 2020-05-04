@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -68,7 +68,7 @@ public class Flight implements Serializable{
 	@NotEmpty(message="image path cannot be empty")
 	private String image;
 	
-	@OneToMany(mappedBy="flight",cascade=CascadeType.MERGE)
+	@OneToMany(mappedBy="flight")
 	private Set<Ticket> tickets = new HashSet<>();
 	
 	public Flight() {

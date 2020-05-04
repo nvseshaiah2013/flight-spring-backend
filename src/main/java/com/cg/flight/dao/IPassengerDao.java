@@ -9,12 +9,13 @@ public interface IPassengerDao {
 
 	Passenger findPassengerById(int id);
 
-	void updatePassenger(Passenger passenger, Passenger passenger_old, String username) throws Exception;
+	void updatePassenger(Passenger passenger, Passenger passenger_old) throws Exception;
 
 	void addPassenger(Passenger passenger, User user);
 
-	void deletePassenger(Passenger passenger, User user) throws Exception;
+	void deletePassenger(Passenger passenger) throws Exception;
 
 	Set<Passenger> getPassengers(User user);
-
+	
+	
 }

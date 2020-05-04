@@ -72,8 +72,8 @@ public class JwtFilter extends OncePerRequestFilter {
 		catch(JwtException e) {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().print(new ErrorMessage(HttpStatus.BAD_REQUEST, e.getMessage()));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);			
+			response.getWriter().print(new ErrorMessage(HttpStatus.FORBIDDEN, e.getMessage()));
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);			
 			return;
 		}
 		filterChain.doFilter(request, response);

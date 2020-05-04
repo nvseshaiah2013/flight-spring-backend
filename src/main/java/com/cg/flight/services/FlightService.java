@@ -2,7 +2,6 @@ package com.cg.flight.services;
 
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ import com.cg.flight.requests.BookFlightRequest;
 
 @Service
 public class FlightService implements IFlightService {
-	
-	private static Logger logger  = LoggerFactory.getLogger(FlightService.class);
+
+	private static Logger logger = LoggerFactory.getLogger(FlightService.class);
 
 	@Autowired
 	private IFlightDao flightRepo;
@@ -31,7 +30,7 @@ public class FlightService implements IFlightService {
 
 	@Override
 	public List<Flight> getFlights(String source, String destination, String date) {
-		logger.info("Flights requested for " + source + " to "+  destination + " " + date);
+		logger.info("Flights requested for " + source + " to " + destination + " " + date);
 		return flightRepo.getFlights(source, destination, date);
 	}
 
@@ -50,26 +49,31 @@ public class FlightService implements IFlightService {
 	public Ticket bookFlight(BookFlightRequest request) throws Exception {
 		Flight flight = this.findFlightById(request.getFlight_code());
 		if (flight.getVacant_seats() <= 0) {
-			logger.error("No Vacant Seats in Flight " + flight.getFlight_name() + " " + " Flight Code: " + flight.getFlight_code());
+			logger.error("No Vacant Seats in Flight " + flight.getFlight_name() + " " + " Flight Code: "
+					+ flight.getFlight_code());
 			throw new NoVacancyException(
 					"The flight " + flight.getFlight_code() + " " + flight.getFlight_name() + " has no vacant seats");
 		}
 		if (request.getIdType().equals("PAN")) {
 			if (!request.getIdNo().matches("[A-Z]{5}[0-9]{4}[A-Z]")) {
-				logger.error("PAN No." + request.getIdNo() + " is Invalid. Permitted Format: ABCDE1234A" );
+				logger.error("PAN No." + request.getIdNo() + " is Invalid. Permitted Format: ABCDE1234A");
 				throw new InvalidPassengerException("PAN No. is Invalid. Permitted Format: ABCDE1234A");
 			}
 		} else if (request.getIdType().equals("Aadhar")) {
 			if (!request.getIdNo().matches("[2-9][0-9]{11}")) {
-				logger.error("Aadhar No. "+ request.getIdNo() +" is Invalid. Permitted Format: 201234567890");
+				logger.error("Aadhar No. " + request.getIdNo() + " is Invalid. Permitted Format: 201234567890");
 				throw new InvalidPassengerException("Aadhar No. is Invalid. Permitted Format: 201234567890");
 			}
 		} else if (request.getIdType().equals("DL")) {
 			if (!request.getIdNo().matches(
-					"((A[NPRS])|(BR)|(C[GH])|(D[LD])|(G[AJ])|(H[RP])|(J[KH])|(K[LA])|(L[AD])|(M[PHNLZ])|(NL)|(OD)|(P[BY])|(RJ)|(SK)|(T[NSR])|(U[PK])|(WB))(\\d{1}[1-9])(20(([0-1][0-9])|(20)))(\\d{6}[1-9])"))
-				
-				logger.error("Driving License " +request.getIdNo()+ " is Invalid. Permitted Format: MH0220201234567");
+					"((A[NPRS])|(BR)|(C[GH])|(D[LD])|(G[AJ])|(H[RP])|(J[KH])|(K[LA])|"
+					+ "(L[AD])|(M[PHNLZ])|(NL)|(OD)|(P[BY])|(RJ)|(SK)|(T[NSR])|"
+					+ "(U[PK])|(WB))(\\d{1}[1-9])(20(([0-1][0-9])|(20)))(\\d{6}[1-9])"))
+
+			{
+				logger.error("Driving License " + request.getIdNo() + " is Invalid. Permitted Format: MH0220201234567");
 				throw new InvalidPassengerException("Driving License is Invalid. Permitted Format: MH0220201234567");
+			}
 		} else if (request.getIdType().equals("Passport")) {
 			if (!request.getIdNo().matches("[A-Z][0-9]{7}")) {
 				logger.error("Passport is " + request.getIdNo() + "Invalid. Permitted Format: A1234567 ");

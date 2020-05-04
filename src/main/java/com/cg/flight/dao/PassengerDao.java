@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cg.flight.entities.Passenger;
 import com.cg.flight.entities.User;
-import com.cg.flight.exceptions.NotFound;
 
 @Repository
 public class PassengerDao implements IPassengerDao{
@@ -31,9 +30,7 @@ public class PassengerDao implements IPassengerDao{
 	}
 
 	@Override
-	public void updatePassenger(Passenger passenger,Passenger passenger_old,String username) throws Exception {
-		if(passenger_old == null || !passenger_old.getUser().getUsername().equals(username))
-			throw new NotFound("Passenger Not Found for Given User");
+	public void updatePassenger(Passenger passenger,Passenger passenger_old) throws Exception {
 		passenger_old.setAge(passenger.getAge());
 		passenger_old.setIdNo(passenger.getIdNo());
 		passenger_old.setIdType(passenger.getIdType());
@@ -48,9 +45,7 @@ public class PassengerDao implements IPassengerDao{
 	}
 
 	@Override
-	public void deletePassenger(Passenger passenger,User user) throws Exception {
-		if (passenger == null || !passenger.getUser().getUsername().equals(user.getUsername()))
-			throw new NotFound("Passenger Not Found for Given User");		
+	public void deletePassenger(Passenger passenger) throws Exception {		
 		entityManager.remove(passenger);
 	}
 }
