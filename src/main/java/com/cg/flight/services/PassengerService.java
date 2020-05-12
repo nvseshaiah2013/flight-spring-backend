@@ -24,6 +24,13 @@ public class PassengerService implements IPassengerService {
 
 	@Autowired
 	IUserService userService;
+	
+	/**
+	 * Function to find Passenger By Id
+	 * Can throw passenger Not Found Exception
+	 * on success returns Passenger Object
+	 * 
+	 */
 
 	@Override
 	public Passenger findPassengerById(int id) throws Exception {
@@ -35,11 +42,24 @@ public class PassengerService implements IPassengerService {
 		return passenger;
 	}
 
+	/**
+	 * Function to Get the List of Passengers Searches for all passengers belonging
+	 * the user identified by the username Can Throw UserNotFound Exception On
+	 * Success returns a List of Passengers
+	 */
+	
 	@Override
 	public Set<Passenger> getPassengers(String username) throws Exception {
 		User user = this.userService.findById(username);
 		return passengerRepo.getPassengers(user);
 	}
+	
+	
+	/*
+	 * Function to Update Passenger belonging to a certain User identified by username.
+	 * It can throw Usernot Found Exception, It can throw Invalid Passenger Exception.
+	 * On Success the passenger is updated to Database.
+	 * */
 
 	@Override
 	@Transactional
@@ -79,6 +99,12 @@ public class PassengerService implements IPassengerService {
 		passengerRepo.updatePassenger(passenger, passenger_old);
 	}
 
+	
+	/*
+	 * Function to Add a Passenger belonging to a certain User identified by Username.
+	 * It can throw UserNotFound Exception, It can throw Invalid Passenger Exception
+	 * On Success the passenger is added to database.
+	 * */
 	@Override
 	@Transactional
 	public void addPassenger(Passenger passenger, String username) throws Exception {
@@ -113,6 +139,13 @@ public class PassengerService implements IPassengerService {
 		this.passengerRepo.addPassenger(passenger, user);
 
 	}
+	
+
+	/*
+	 * Function to Delete Passenger belonging to a certain User identified by username.
+	 * It can throw UsernotFound Exception, It can throw Invalid Passenger Id Exception.
+	 * On Success the passenger is deleted from Database.
+	 * */
 
 	@Override
 	@Transactional

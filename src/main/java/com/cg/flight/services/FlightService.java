@@ -27,12 +27,26 @@ public class FlightService implements IFlightService {
 
 	@Autowired
 	private IUserService userService;
+	
+
+	/**
+	 * Function to Get List of Flights Based on The source,destination and Date.
+	 * On Success function returns the list of Flights.
+	 * */
 
 	@Override
 	public List<Flight> getFlights(String source, String destination, String date) {
 		logger.info("Flights requested for " + source + " to " + destination + " " + date);
 		return flightRepo.getFlights(source, destination, date);
 	}
+	
+	
+	/**
+	 * Function to Find Flight using flight_code
+	 * Can throw Flight NotFound exception 
+	 * On success returns Flight Object	 
+	 * 
+	 * */
 
 	@Override
 	public Flight findFlightById(String flight_code) throws Exception {
@@ -43,6 +57,13 @@ public class FlightService implements IFlightService {
 		}
 		return flight;
 	}
+	
+	
+	/**
+	 * Function to Book Flight Ticket.
+	 * Function Can Throw UserNotFoundException, NoVacancyException. InvalidPassengerException, FlightNotFoundException.
+	 * On Success function Returns a Confirmed Ticket.
+	 * */
 
 	@Override
 	@Transactional
@@ -91,10 +112,22 @@ public class FlightService implements IFlightService {
 		return flightRepo.bookFlight(flight, user, request);
 	}
 
+	/**
+	 * Function to Get List of Source cities.
+	 * On Success function returns the list of Source Cities..
+	 * */
+	
+	
 	@Override
 	public List<String> getSources() {
 		return flightRepo.getSources();
 	}
+	
+	
+	/**
+	 * Function to Get List of Destination cities.
+	 * On Success function returns the list of Destination Cities..
+	 * */
 
 	@Override
 	public List<String> getDestinations() {

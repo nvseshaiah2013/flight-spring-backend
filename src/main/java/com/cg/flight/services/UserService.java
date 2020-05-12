@@ -35,6 +35,14 @@ public class UserService implements IUserService {
 	@Autowired
 	private AuthenticationManager authManager;
 	
+	/**
+	 * Function to Find User by username
+	 * Can throw User Not Found Exception
+	 * On Success returns User. 
+	 *
+	 * 
+	 * */
+	
 	@Override
 	public User findById(String username) throws Exception{
 		User user = userRepo.findById(username);
@@ -46,6 +54,14 @@ public class UserService implements IUserService {
 		return user;
 	}
 	
+	/*
+	 * Function To Register A New User to the Database.
+	 * Can throw an UserRegistrationException 
+	 * in case the username provided already exists in the database.
+	 * Throws an IllegalStateException if the User object provided by Client fails the validation.
+	 * Returns a success status response entity on successful addition of User with a CREATED status.
+	 * */
+	
 	@Override
 	@Transactional
 	public void registerUser(User user) throws UserRegistrationException {
@@ -54,10 +70,18 @@ public class UserService implements IUserService {
 		if (tempUser != null)
 			 {
 			logger.error("Username with " + user.getUsername() + " already Exists");
-			throw new UserRegistrationException(); }
+			throw new UserRegistrationException(); 
+			 }
 
 		userRepo.addUser(user);
 	}
+	
+	/*
+	 * Function to Authenticate an Existing User.
+	 * Can Throw an BadCredentialsException if the username and password combination is invalid.
+	 * Throws and IllegalStateException if the LoginRequest provided by client fails validation.
+	 * Returns Json Web Token and User Object as Response with the OK Status.
+	 * */
 	
 	@Override
 	public LoginResponse getAuthenticationToken(LoginRequest authenticationRequest) throws Exception {

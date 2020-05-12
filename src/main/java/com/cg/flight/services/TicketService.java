@@ -24,6 +24,14 @@ public class TicketService implements ITicketService{
 	
 	@Autowired
 	private IUserService userService;
+	
+	
+
+	/*
+	 * Function To Cancel Ticket owned by User identified By username.
+	 * Can Throw Invalid TicketException, Or TicketNotFoundException.
+	 * On Success the ticket gets Cancelled.
+	 * */
 
 	@Override
 	@Transactional
@@ -43,12 +51,26 @@ public class TicketService implements ITicketService{
 		return ticketRepo.cancelTicket(ticket);
 	}
 	
+
+	/*
+	 * Function to Get List of Tickets owned by user identified by username.
+	 * Can Throw UserNotFoundException
+	 * On Success Returns list of Tickets.
+	 * */
+	
 	@Override
 	public Set<Ticket> getTickets(String username) throws Exception {
 		User user = this.userService.findById(username);
 		return ticketRepo.getTickets(user);
 
 	}
+	
+	/*
+	 * Function Find Ticket Using id
+	 * Can throw Ticket No Found Exception
+	 * On Success Returns ticket object.
+	 * 
+	 * */
 	
 	@Override
 	public Ticket findTicketById(int ticketId) throws Exception {
